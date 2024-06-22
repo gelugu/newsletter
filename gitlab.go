@@ -130,12 +130,12 @@ func (g *GitLab) RenderCommits(project *gitlab.Project, commits []*gitlab.Commit
 	return message
 }
 
-func (g *GitLab) GenerateReport() string {
+func (g *GitLab) GenerateReport() (string, error) {
 	report := ""
 
 	projects, err := g.GetProjects()
 	if err != nil {
-		log.Errorf("Error getting projects: %s", err.Error())
+		return "", fmt.Errorf("failed to get projects: %w", err)
 	}
 
 	for _, project := range projects {
@@ -157,9 +157,9 @@ func (g *GitLab) GenerateReport() string {
 	}
 
 	if report == "" {
-		return ""
+		return "", nil
 	} else {
 		report = "GitLab report\n" + report
-		return report
+		return report, nil
 	}
 }

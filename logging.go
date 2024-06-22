@@ -7,8 +7,8 @@ import (
 )
 
 func getLogger() *logrus.Logger {
-	var log = logrus.New()
-	log.SetOutput(os.Stdout)
+	var logger = logrus.New()
+	logger.SetOutput(os.Stdout)
 
 	logLevel, err := logrus.ParseLevel(config.LogLevel)
 	if err != nil {
@@ -20,9 +20,9 @@ func getLogger() *logrus.Logger {
 		logLevel = logrus.DebugLevel
 	}
 
-	log.SetLevel(logLevel)
+	logger.SetLevel(logLevel)
 
-	return log
+	return logger
 }
 
 var log = getLogger()

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/PaulSonOfLars/gotgbot/v2"
 )
 
@@ -27,7 +28,7 @@ func NewTelegram() *Telegram {
 	}
 }
 
-func (t *Telegram) SendMessage(message string) {
+func (t *Telegram) SendMessage(message string) (*gotgbot.Message, error) {
 	log.Debugf("Sending message to %d", t.ChannelID)
 
 	messageOpts := &gotgbot.SendMessageOpts{
@@ -36,14 +37,14 @@ func (t *Telegram) SendMessage(message string) {
 			IsDisabled: true,
 		},
 	}
-	_, err := t.Bot.SendMessage(t.ChannelID, message, messageOpts)
+	sentMessage, err := t.Bot.SendMessage(t.ChannelID, message, messageOpts)
 	if err != nil {
-		log.Errorf("Error sending message to %d with message %s", t.ChannelID, message)
-		log.Errorf("Error: %s", err.Error())
-		return
+		return nil, fmt.Errorf("failed to send message: %w", err)
 	}
 
 	log.Infof("Message successfully sent to chat: %d", t.ChannelID)
+
+	return sentMessage, nil
 }
 
 var bot = NewTelegram()
